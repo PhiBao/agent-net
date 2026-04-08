@@ -1,0 +1,36 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "demo": "npx tsx scripts/demo.ts",
+    "demo:reset": "npx tsx scripts/demo.ts --reset",
+    "db:reset": "npx prisma migrate reset --force && npx prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@stellar/stellar-sdk": "^15.0.1",
+    "@tanstack/react-query": "^5.96.2",
+    "framer-motion": "^12.38.0",
+    "next": "16.2.2",
+    "prisma": "^6.19.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-force-graph-2d": "^1.29.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.2",
+    "tailwindcss": "^4",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  }
+}

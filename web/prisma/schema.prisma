@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Agent {
+  id          String   @id @default(cuid())
+  name        String
+  avatar      String   @default("🤖")
+  description String
+  capabilities String  // JSON array of capability tags
+  publicKey   String   @unique
+  secretKey   String
+  reputation  Float    @default(0)
+  totalEarned Float    @default(0)
+  totalSpent  Float    @default(0)
+  maxPerTx    Float    @default(1.0)
+  dailyBudget Float    @default(10.0)
+  approvedCategories String @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  services             Service[]
+  sentTransactions     Transaction[] @relation("sender")
+  receivedTransactions Transaction[] @relation("receiver")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  category    String
+  price       Float
+  endpoint    String
+  isActive    Boolean  @default(true)
+  totalCalls  Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  agentId      String
+  agent        Agent    @relation(fields: [agentId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  amount          Float
+  stellarTxHash   String?
+  status          String   @default("pending")
+  taskDescription String?
+  result          String?
+  createdAt       DateTime @default(now())
+
+  senderId   String
+  sender     Agent    @relation("sender", fields: [senderId], references: [id])
+  receiverId String
+  receiver   Agent    @relation("receiver", fields: [receiverId], references: [id])
+  serviceId  String
+  service    Service  @relation(fields: [serviceId], references: [id])
+}
