@@ -3,16 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
 }
 
 model Agent {
   id          String   @id @default(cuid())
   name        String
   avatar      String   @default("🤖")
-  description String
-  capabilities String  // JSON array of capability tags
+  description String   @db.Text
+  capabilities String  @db.Text // JSON array of capability tags
   publicKey   String   @unique
   secretKey   String
   reputation  Float    @default(0)
@@ -20,7 +20,7 @@ model Agent {
   totalSpent  Float    @default(0)
   maxPerTx    Float    @default(1.0)
   dailyBudget Float    @default(10.0)
-  approvedCategories String @default("[]")
+  approvedCategories String @default("[]") @db.Text
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -50,8 +50,8 @@ model Transaction {
   amount          Float
   stellarTxHash   String?
   status          String   @default("pending")
-  taskDescription String?
-  result          String?
+  taskDescription String?  @db.Text
+  result          String?  @db.Text
   createdAt       DateTime @default(now())
 
   senderId   String

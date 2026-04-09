@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
+    "db:push": "prisma db push",
     "start": "next start",
     "lint": "eslint",
+    "postinstall": "prisma generate",
     "demo": "npx tsx scripts/demo.ts",
     "demo:reset": "npx tsx scripts/demo.ts --reset",
     "db:reset": "npx prisma migrate reset --force && npx prisma generate"
