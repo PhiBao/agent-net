@@ -16,6 +16,7 @@
  *   npx tsx scripts/demo.ts --skip-seed # Only run demo tasks (agents must exist)
  */
 
+import "dotenv/config";
 import {
   Keypair,
   Horizon,
