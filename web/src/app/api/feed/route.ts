@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
-  const limit = parseInt(searchParams.get("limit") || "50");
+  const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "50") || 50, 1), 200);
   const after = searchParams.get("after");
 
   const where = after ? { createdAt: { gt: new Date(after) } } : {};

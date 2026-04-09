@@ -17,10 +17,22 @@ export async function GET() {
   });
 
   const result = agents.map((a) => ({
-    ...a,
-    secretKey: undefined,
+    id: a.id,
+    name: a.name,
+    avatar: a.avatar,
+    description: a.description,
     capabilities: JSON.parse(a.capabilities),
     approvedCategories: JSON.parse(a.approvedCategories),
+    publicKey: a.publicKey,
+    reputation: a.reputation,
+    totalEarned: a.totalEarned,
+    totalSpent: a.totalSpent,
+    maxPerTx: a.maxPerTx,
+    dailyBudget: a.dailyBudget,
+    createdAt: a.createdAt,
+    updatedAt: a.updatedAt,
+    services: a.services,
+    _count: a._count,
   }));
 
   return NextResponse.json(result);
@@ -52,9 +64,16 @@ export async function POST(req: NextRequest) {
   });
 
   return NextResponse.json({
-    ...agent,
-    secretKey: undefined,
+    id: agent.id,
+    name: agent.name,
+    avatar: agent.avatar,
+    description: agent.description,
     capabilities: JSON.parse(agent.capabilities),
+    publicKey: agent.publicKey,
+    reputation: agent.reputation,
+    totalEarned: agent.totalEarned,
+    totalSpent: agent.totalSpent,
+    createdAt: agent.createdAt,
     wallet: {
       publicKey: wallet.publicKey,
       funded: wallet.funded,

@@ -36,9 +36,9 @@ export async function GET(
 
   const balance = await getBalance(agent.publicKey);
 
+  const { secretKey: _sk, ...safeAgent } = agent;
   return NextResponse.json({
-    ...agent,
-    secretKey: undefined,
+    ...safeAgent,
     capabilities: JSON.parse(agent.capabilities),
     approvedCategories: JSON.parse(agent.approvedCategories),
     balance,
@@ -55,8 +55,16 @@ export async function PATCH(
   const { maxPerTx, dailyBudget, approvedCategories } = body;
 
   const updateData: Record<string, unknown> = {};
-  if (maxPerTx !== undefined) updateData.maxPerTx = maxPerTx;
-  if (dailyBudget !== undefined) updateData.dailyBudget = dailyBudget;
+  if (maxPerTx !== undefined) {
+    const val = parseFloat(maxPerTx);
+    if (isNaN(val) || val < 0) return NextResponse.json({ error: "Invalid maxPerTx" }, { status: 400 });
+    updateData.maxPerTx = val;
+  }
+  if (dailyBudget !== undefined) {
+    const val = parseFloat(dailyBudget);
+    if (isNaN(val) || val < 0) return NextResponse.json({ error: "Invalid dailyBudget" }, { status: 400 });
+    updateData.dailyBudget = val;
+  }
   if (approvedCategories !== undefined)
     updateData.approvedCategories = JSON.stringify(approvedCategories);
 
@@ -65,9 +73,9 @@ export async function PATCH(
     data: updateData,
   });
 
+  const { secretKey: _sk, ...safeAgent } = agent;
   return NextResponse.json({
-    ...agent,
-    secretKey: undefined,
+    ...safeAgent,
     capabilities: JSON.parse(agent.capabilities),
   });
 }
